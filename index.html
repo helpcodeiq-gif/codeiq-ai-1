@@ -4,28 +4,41 @@
   <title>CodeIQ AI</title>
 </head>
 <body>
-  <h2>CodeIQ AI</h2>
 
-  <textarea id="note" placeholder="Enter note"></textarea><br><br>
-  <button onclick="send()">Generate</button>
+<h2>CodeIQ AI</h2>
 
-  <p id="result"></p>
+<textarea id="note" placeholder="Enter note"></textarea><br><br>
+<button onclick="send()">Generate</button>
 
-  <script>
-    async function send() {
-      const note = document.getElementById("note").value;
+<p id="result"></p>
 
-      const res = await fetch("https://codeiq-ai-1.onrender.com/ai, {
-        method: "POST",
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify({ note })
-      });
+<script>
+async function send() {
+  const note = document.getElementById("note").value;
 
-      const data = await res.json();
+  try {
+    const res = await fetch("https://codeiq-ai-1.onrender.com/ai", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ note })
+    });
 
-      document.getElementById("result").innerText =
-        "ICD: " + data.icd + " | CPT: " + data.cpt;
-    }
-  </script>
+    const data = await res.json();
+
+    // 👇 force output
+    document.getElementById("result").innerText =
+      "ICD: " + data.icd + " | CPT: " + data.cpt;
+
+    // 👇 debug popup (important)
+    alert("ICD: " + data.icd + " | CPT: " + data.cpt);
+
+  } catch (err) {
+    alert("Error: " + err);
+  }
+}
+</script>
+
 </body>
 </html>
