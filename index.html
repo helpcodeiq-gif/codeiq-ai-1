@@ -1,26 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CodeIQ AI</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      background: #4CAF50;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .loading {
+      color: orange;
+    }
+  </style>
 </head>
+
 <body>
 
-  <h2>CodeIQ AI</h2>
+  <div class="box">
+    <h2>🧠 CodeIQ AI</h2>
 
-  <textarea id="note" placeholder="Enter symptoms"></textarea><br><br>
+    <textarea id="note" placeholder="Enter symptoms (e.g. fever, diabetes)"></textarea>
 
-  <button onclick="send()">Generate</button>
+    <br>
+    <button onclick="send()">Generate</button>
 
-  <p id="result"></p>
+    <p id="result"></p>
+  </div>
 
   <script>
     async function send() {
-      const note = document.getElementById("note").value;
+      const note = document.getElementById("note").value.trim();
+      const resultBox = document.getElementById("result");
 
       if (!note) {
-        alert("Enter something");
+        alert("Please enter symptoms");
         return;
       }
+
+      resultBox.innerText = "⏳ Processing...";
+      resultBox.classList.add("loading");
 
       try {
         const res = await fetch("https://codeiq-ai-1.onrender.com/ai", {
@@ -33,11 +94,13 @@
 
         const data = await res.json();
 
-        document.getElementById("result").innerText =
-          "ICD: " + data.icd + " | CPT: " + data.cpt;
+        resultBox.classList.remove("loading");
+        resultBox.innerText = `ICD: ${data.icd} | CPT: ${data.cpt}`;
 
       } catch (err) {
-        alert("Error: " + err);
+        resultBox.classList.remove("loading");
+        resultBox.innerText = "❌ Error connecting to server";
+        console.error(err);
       }
     }
   </script>
