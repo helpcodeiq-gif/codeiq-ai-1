@@ -65,7 +65,8 @@ async function send() {
   result.innerText = "⏳ Loading...";
 
   try {
-    fetch("https://codeiq-ai-1.onrender.com/generate-codes", {
+    try {
+  const res = await fetch("https://codeiq-ai-1.onrender.com/generate-codes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
