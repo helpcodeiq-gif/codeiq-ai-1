@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CodeIQ AI</title>
 
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: Arial;
       background: #f5f6fa;
       text-align: center;
       padding: 40px;
     }
 
     .box {
-      background: white;
+      background: #fff;
       padding: 20px;
       border-radius: 10px;
       max-width: 400px;
@@ -48,11 +48,6 @@
     #result {
       margin-top: 20px;
       font-weight: bold;
-      color: #333;
-    }
-
-    .loading {
-      color: orange;
     }
   </style>
 </head>
@@ -62,9 +57,8 @@
   <div class="box">
     <h2>🧠 CodeIQ AI</h2>
 
-    <textarea id="note" placeholder="Enter symptoms (e.g. fever, diabetes)"></textarea>
+    <textarea id="note" placeholder="Enter symptoms"></textarea><br>
 
-    <br>
     <button onclick="send()">Generate</button>
 
     <p id="result"></p>
@@ -72,33 +66,32 @@
 
   <script>
     async function send() {
-      const note = document.getElementById("note").value.trim();
-      const resultBox = document.getElementById("result");
+      const note = document.getElementById("note").value;
 
       if (!note) {
-        alert("Please enter symptoms");
+        alert("Enter something");
         return;
       }
 
-      resultBox.innerText = "⏳ Processing...";
-      resultBox.classList.add("loading");
+      document.getElementById("result").innerText = "Loading...";
 
-const res = await fetch("https://codeiq-ai-1.onrender.com/ai", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({ note })
-});
+      try {
+        const res = await fetch("https://codeiq-ai-1.onrender.com/ai", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ note })
+        });
+
         const data = await res.json();
 
-        resultBox.classList.remove("loading");
-        resultBox.innerText = `ICD: ${data.icd} | CPT: ${data.cpt}`;
+        document.getElementById("result").innerText =
+          "ICD: " + data.icd + " | CPT: " + data.cpt;
 
       } catch (err) {
-        resultBox.classList.remove("loading");
-        resultBox.innerText = "❌ Error connecting to server";
-        console.error(err);
+        document.getElementById("result").innerText = "Error connecting to server";
+        console.log(err);
       }
     }
   </script>
