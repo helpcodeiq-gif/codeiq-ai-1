@@ -95,12 +95,10 @@
 
         const data = await res.json();
 
-        result.innerText =
-          "ICD: " + data.icd + " | CPT: " + data.cpt;
+        result.innerText = "✅ ICD: " + data.icd + " | CPT: " + data.cpt;
 
       } catch (err) {
         result.innerText = "❌ Error connecting to server";
-        console.log(err);
       }
     }
   </script>
