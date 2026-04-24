@@ -7,26 +7,26 @@
 
   <style>
     body {
-      font-family: Arial;
+      font-family: Arial, sans-serif;
       background: #f5f6fa;
       text-align: center;
       padding: 40px;
     }
 
     .box {
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
       max-width: 400px;
       margin: auto;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     textarea {
       width: 100%;
       height: 100px;
       padding: 10px;
-      border-radius: 6px;
+      border-radius: 8px;
       border: 1px solid #ccc;
       margin-top: 10px;
     }
@@ -39,6 +39,7 @@
       color: white;
       border-radius: 6px;
       cursor: pointer;
+      font-size: 16px;
     }
 
     button:hover {
@@ -48,6 +49,7 @@
     #result {
       margin-top: 20px;
       font-weight: bold;
+      color: #333;
     }
   </style>
 </head>
@@ -55,9 +57,11 @@
 <body>
 
   <div class="box">
-    <h2>🧠 CodeIQ AI</h2>
+    <h2>🚀 CodeIQ AI</h2>
 
-    <textarea id="note" placeholder="Enter symptoms"></textarea><br>
+    <textarea id="note" placeholder="Enter symptoms (e.g. fever, diabetes)"></textarea>
+
+    <br>
 
     <button onclick="send()">Generate</button>
 
@@ -66,14 +70,15 @@
 
   <script>
     async function send() {
-      const note = document.getElementById("note").value;
+      const note = document.getElementById("note").value.trim();
+      const result = document.getElementById("result");
 
       if (!note) {
-        alert("Enter something");
+        alert("Please enter symptoms");
         return;
       }
 
-      document.getElementById("result").innerText = "Loading...";
+      result.innerText = "⏳ Loading...";
 
       try {
         const res = await fetch("https://codeiq-ai-1.onrender.com/ai", {
@@ -86,11 +91,11 @@
 
         const data = await res.json();
 
-        document.getElementById("result").innerText =
+        result.innerText =
           "ICD: " + data.icd + " | CPT: " + data.cpt;
 
       } catch (err) {
-        document.getElementById("result").innerText = "Error connecting to server";
+        result.innerText = "❌ Server error";
         console.log(err);
       }
     }
