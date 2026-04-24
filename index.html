@@ -1,105 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CodeIQ AI</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeIQ AI</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f6fa;
-      text-align: center;
-      padding: 40px;
-    }
+<style>
+body {
+  font-family: Arial;
+  background: #f5f6fa;
+  text-align: center;
+  padding: 40px;
+}
 
-    .box {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      max-width: 400px;
-      margin: auto;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
+.box {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  max-width: 400px;
+  margin: auto;
+}
 
-    textarea {
-      width: 100%;
-      height: 100px;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      margin-top: 10px;
-    }
+textarea {
+  width: 100%;
+  height: 100px;
+}
 
-    button {
-      margin-top: 15px;
-      padding: 10px 20px;
-      border: none;
-      background: #4CAF50;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 16px;
-    }
+button {
+  margin-top: 15px;
+  padding: 10px;
+  background: green;
+  color: white;
+  border: none;
+}
 
-    button:hover {
-      background: #45a049;
-    }
-
-    #result {
-      margin-top: 20px;
-      font-weight: bold;
-      color: #333;
-    }
-  </style>
+#result {
+  margin-top: 20px;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="box">
-    <h2>🚀 CodeIQ AI</h2>
+<div class="box">
+<h2>🚀 CodeIQ AI</h2>
 
-    <textarea id="note" placeholder="Enter symptoms (e.g. diabetes, fever)"></textarea>
+<textarea id="note" placeholder="Enter symptoms"></textarea><br>
 
-    <br>
+<button onclick="send()">Generate</button>
 
-    <button onclick="send()">Generate</button>
+<div id="result"></div>
+</div>
 
-    <p id="result"></p>
-  </div>
+<script>
+async function send() {
+  const note = document.getElementById("note").value.trim();
+  const result = document.getElementById("result");
 
-  <script>
-    async function send() {
-      const note = document.getElementById("note").value.trim();
-      const result = document.getElementById("result");
+  if (!note) {
+    alert("Enter symptoms");
+    return;
+  }
 
-      if (!note) {
-        alert("Enter symptoms");
-        return;
-      }
+  result.innerText = "⏳ Loading...";
 
-      result.innerText = "⏳ Loading...";
+  try {
+    const res = await fetch("/generate-codes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ note })
+    });
 
-      try {
-        const res = await fetch("https://codeiq-ai-1.onrender.com/ai", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ note })
-        });
+    const data = await res.json();
 
-        const data = await res.json();
+    result.innerHTML = `
+      ICD: ${data.icd}<br>
+      CPT: ${data.cpt}<br>
+      <small>${data.explanation}</small>
+    `;
 
-        result.innerText = "ICD: " + data.icd + " | CPT: " + data.cpt;
-
-      } catch (err) {
-        result.innerText = "❌ Server error";
-      }
-    }
-  </script>
+  } catch (err) {
+    result.innerText = "❌ Error";
+  }
+}
+</script>
 
 </body>
 </html>
-
-
