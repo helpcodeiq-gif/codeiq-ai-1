@@ -83,15 +83,13 @@
       resultBox.innerText = "⏳ Processing...";
       resultBox.classList.add("loading");
 
-      try {
-        const res = await fetch("https://codeiq-ai-1.onrender.com/ai", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ note })
-        });
-
+const res = await fetch("https://codeiq-ai-1.onrender.com/ai", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ note })
+});
         const data = await res.json();
 
         resultBox.classList.remove("loading");
