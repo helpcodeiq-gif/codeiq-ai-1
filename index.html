@@ -27,12 +27,8 @@ async function send() {
 
     const data = await res.json();
 
-    // 👇 force output
     document.getElementById("result").innerText =
       "ICD: " + data.icd + " | CPT: " + data.cpt;
-
-    // 👇 debug popup (important)
-    alert("ICD: " + data.icd + " | CPT: " + data.cpt);
 
   } catch (err) {
     alert("Error: " + err);
