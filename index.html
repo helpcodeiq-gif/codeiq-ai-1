@@ -59,7 +59,7 @@
   <div class="box">
     <h2>🚀 CodeIQ AI</h2>
 
-    <textarea id="note" placeholder="Enter symptoms (e.g. fever, diabetes)"></textarea>
+    <textarea id="note" placeholder="Enter symptoms (e.g. diabetes, fever)"></textarea>
 
     <br>
 
@@ -89,13 +89,17 @@
           body: JSON.stringify({ note })
         });
 
+        if (!res.ok) {
+          throw new Error("Server error");
+        }
+
         const data = await res.json();
 
         result.innerText =
           "ICD: " + data.icd + " | CPT: " + data.cpt;
 
       } catch (err) {
-        result.innerText = "❌ Server error";
+        result.innerText = "❌ Error connecting to server";
         console.log(err);
       }
     }
