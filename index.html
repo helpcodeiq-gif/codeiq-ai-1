@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CodeIQ AI</title>
+</head>
+<body>
+  <h2>CodeIQ AI</h2>
+
+  <textarea id="note" placeholder="Enter note"></textarea><br><br>
+  <button onclick="send()">Generate</button>
+
+  <p id="result"></p>
+
+  <script>
+    async function send() {
+      const note = document.getElementById("note").value;
+
+      const res = await fetch("https://YOUR-BACKEND.onrender.com/ai", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({ note })
+      });
+
+      const data = await res.json();
+
+      document.getElementById("result").innerText =
+        "ICD: " + data.icd + " | CPT: " + data.cpt;
+    }
+  </script>
+</body>
+</html>
